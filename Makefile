@@ -7,10 +7,10 @@ BDIR := bin
 CC := gcc
 CFLAGS := -I$(IDIR)
 
-_DEPS = connection.h send.h
+_DEPS = connection.h send.h request.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o connection.o send.o
+_OBJ = main.o connection.o send.o request.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
@@ -23,7 +23,7 @@ all: server
 server: $(OBJ)
 	$(CC) -o $(BDIR)/$@ $^ $(CFLAGS)
 
-debug: CFLAGS += -ggdb -Og
+debug: CFLAGS += -ggdb
 debug: all
 
 release: CFLAGS += -s -O2
