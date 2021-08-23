@@ -3,7 +3,7 @@
 IDIR := include
 ODIR := obj
 SDIR := src
-BDIN := bin
+BDIR := bin
 CC := gcc
 CFLAGS := -I$(IDIR)
 
@@ -16,15 +16,18 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-.PHONY: clean all
+.PHONY: clean all server debug release
 
 all: server
 
 server: $(OBJ)
-	$(CC) -o $(BDIN)/$@ $^ $(CFLAGS)
+	$(CC) -o $(BDIR)/$@ $^ $(CFLAGS)
 
-debug: CFLAGS += -ggdb -O0
+debug: CFLAGS += -ggdb -Og
 debug: all
 
+release: CFLAGS += -s -O2
+release: all
+
 clean:
-	rm -f $(ODIR)/*.o $(BDIN)/server
+	rm -f $(ODIR)/*.o $(BDIR)/server
