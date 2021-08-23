@@ -21,9 +21,32 @@ static char *get_method(char *str){
    }
 }
 
-//TD
+//Gets the wanted resource by assuming spaces are around it
 static char *get_resource(char *str){
-   return NULL;
+
+   //Start of the resource
+   char *start = strchr(str, ' ');
+   if (!start){
+      return NULL;
+   }
+   start++;
+
+   char *end = strchr(start, ' ');
+   if (!end){
+      return NULL;
+   }
+
+   size_t len = end - start;
+
+   //Two spaces right next to each other
+   if (!len){
+      return NULL;
+   }
+
+   char *resource = malloc(sizeof(char) * (len + 1) );
+   strncat(resource, start, len);
+   
+   return resource;
 }
 
 //Processes the user request, each method does it individually
