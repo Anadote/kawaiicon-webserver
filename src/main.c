@@ -3,17 +3,27 @@
 #include <stdlib.h>
 #include "connection.h"
 #include "send.h"
+#include "request.h"
+
+//TD
+static void send_info(struct request *user_request){
+
+}
 
 //Handles a single user
 static int user_handler(int fd){
 
    char buf[4096];
+   struct request *user_request = malloc(sizeof(struct request));
 
-   //We just read and echo
    read(fd, buf, 4096);
-   sendstr(fd, "Welcome from the server, here is your sent request:\n\n");
-   sendstr(fd, buf);
 
+   user_request = process_request(buf);
+   if (!user_request){
+      return 1;
+   }
+
+   send_info(user_request);
    return 0;
 }
 
