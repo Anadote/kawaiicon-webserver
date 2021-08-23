@@ -5,9 +5,17 @@
 #include "send.h"
 #include "request.h"
 
-//TD
-static void send_info(struct request *user_request){
+//Just sends the recv'd info back
+static void send_info(int fd, struct request *user_request){
 
+   sendstr(fd, "Server says hi\n\n");
+   
+   sendstr(fd, "Your method was: ");
+   sendstr(fd, user_request->method);
+   sendstr(fd, "\n");
+
+   sendstr(fd, "Resource was: ");
+   sendstr(fd, user_request->resource);
 }
 
 //Handles a single user
@@ -23,7 +31,7 @@ static int user_handler(int fd){
       return 1;
    }
 
-   send_info(user_request);
+   send_info(fd, user_request);
    return 0;
 }
 
