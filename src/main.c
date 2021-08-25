@@ -4,18 +4,17 @@
 #include "connection.h"
 #include "send.h"
 #include "request.h"
+#include "html.h"
 
-//Just sends the recv'd info back
-static void send_info(int fd, struct request *user_request){
+//Cleans up the struct
+static void cleanup(struct request **user_request){
 
-   sendstr(fd, "Server says hi\n\n");
-   
-   sendstr(fd, "Your method was: ");
-   sendstr(fd, user_request->method);
-   sendstr(fd, "\n");
+   //This so we get the propper address of the user struct
+   struct request *request = (struct request*)user_request;
 
-   sendstr(fd, "Resource was: ");
-   sendstr(fd, user_request->resource);
+   free(request->method);
+   free(request->resource);
+   free(request);
 }
 
 //Handles a single user
@@ -31,7 +30,9 @@ static int user_handler(int fd){
       return 1;
    }
 
-   send_info(fd, user_request);
+   send_page(fd, user_request->resource);
+
+   cleanup(&user_request);
    return 0;
 }
 
