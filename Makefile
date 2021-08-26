@@ -31,3 +31,6 @@ release: all
 
 clean:
 	rm -f $(ODIR)/*.o $(BDIR)/server
+
+run:
+	./bin/server

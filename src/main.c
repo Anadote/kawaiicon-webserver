@@ -37,6 +37,10 @@ static int user_handler(int fd){
 }
 
 int main(){
+   set_server_path();
    connection(user_handler);
+   
+   //Need a better way than this
+   free(SERVER_DIR);
 }
 
