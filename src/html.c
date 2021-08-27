@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "html.h"
 #include "send.h"
+#include "util.h"
 
 //Sets the path of where the server i
 void set_server_path(){
@@ -35,14 +36,6 @@ void set_server_path(){
 
 }
 
-//Gets a static string and returns a malloc of it
-static char* alloc_str(char *buf){
-    char *str = malloc(sizeof(char) * (strlen(buf) + 1));
-    strcpy(str, buf);
-    return str;
-    
-}
-
 //Checks the page, and makes the right path that the user will get
 static char *check_page(char *str){
 
@@ -65,6 +58,7 @@ static char *get_content(char *str){
     char *page_dir;
 
     char page_content[PAGE_SIZE];
+    memset(page_content, 0, PAGE_SIZE);
 
     //page_dir = server_page_dir + str
     size_t page_dir_size = SERVER_DIR_SIZE + strlen(str) + 1;
@@ -87,13 +81,12 @@ static char *get_content(char *str){
     return alloc_str(page_content);
 }
 
-//Send the page from str
-void send_page(int fd, char *str){
+//Gets the wanted page content
+char *get_page(char *resource){
 
-    char *page = check_page(str);
-    char *page_content = get_content(page);
+    char *page_found = check_page(resource);
+    char *page_content = get_content(page_found);
 
-    sendstr(fd, page_content);
-    free(page);
-    free(page_content);
+    free(page_found);
+    return page_content;
 }

@@ -1,4 +1,4 @@
-void send_page(int fd, char *str);
+char *get_page(char *str);
 
 void set_server_path();
 

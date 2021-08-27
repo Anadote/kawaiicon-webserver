@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "request.h"
+#include "util.h"
 
 //Gets the method via strcmp
 static char *get_method(char *str){
@@ -10,10 +11,10 @@ static char *get_method(char *str){
       return NULL;
    }
    else if (!strncmp(str, "GET", 3)){
-      return "GET";
+      return alloc_str("GET");
    }
    else if (!strncmp(str, "HEAD", 4)){
-      return "HEAD";
+      return alloc_str("HEAD");
    }
    else
    {
@@ -49,6 +50,32 @@ static char *get_resource(char *str){
    return resource;
 }
 
+static char *get_http_type(char *str){
+
+   char *first_space = strchr(str, ' ');
+   if (!first_space){
+      return NULL;
+   }
+   first_space++;
+
+   char *http_start = strchr(first_space, ' ');
+   if (!http_start){
+      return NULL;
+   }
+   http_start++;
+
+   char *http_end = strstr(http_start, "\r\n");
+   if (!http_end){
+      return NULL;
+   }
+
+   size_t http_len = http_end - http_start;
+   char *http_type = malloc(sizeof(char) * (http_len + 1));
+   strncpy(http_type, http_start, http_len);
+
+   return http_type;
+}
+
 //Processes the user request, each method does it individually
 struct request *process_request(char *str){
 
@@ -66,5 +93,12 @@ struct request *process_request(char *str){
    }
    user_request->resource = user_resource;
    
+   char *http_type = get_http_type(str);
+   if (!http_type){
+      return NULL;
+   }
+
+   user_request->http_type = http_type;
+
    return user_request;
 }

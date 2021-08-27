@@ -7,10 +7,10 @@ BDIR := bin
 CC := gcc
 CFLAGS := -I$(IDIR)
 
-_DEPS = connection.h send.h request.h html.h
+_DEPS = connection.h send.h request.h html.h util.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o connection.o send.o request.o html.o
+_OBJ = main.o connection.o send.o request.o html.o util.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
